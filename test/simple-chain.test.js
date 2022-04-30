@@ -21,6 +21,7 @@ describe('Make chain!', () => {
 
     describe('base requirements', () => {
         it.optional('chaining works!', () => {
+            console.log(chainMaker.addLink(function () { }).addLink('2nd').addLink('3rd').removeLink(2).reverseChain().finishChain());
             assert.deepEqual(chainMaker.addLink(function () { }).addLink('2nd').addLink('3rd').removeLink(2).reverseChain().finishChain(), '( 3rd )~~( function () { } )');
         });
 
