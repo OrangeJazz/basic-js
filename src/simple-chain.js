@@ -5,35 +5,40 @@ const { NotImplementedError } = require("../extensions/index.js");
  *
  */
 const chainMaker = {
-  chain: "",
+  chain: [],
   getLength() {
-    let arr = this.chain.split("~~");
-    return arr.length;
+    return this.chain.length;
   },
   addLink(value) {
-    if (this.chain.length !== 0) this.chain += "~~";
-    if (arguments.length == 0) this.chain += "( )";
+    if (arguments.length == 0) this.chain.push("( )");
     value = String(value);
-    this.chain += `( ${value} )`;
+    this.chain.push(`( ${value} )`);
     return this;
   },
   removeLink(position) {
-    let arr = this.chain.split("~~");
-    arr.splice(position - 1, 1);
-    this.chain = arr.join("~~");
+    if (
+      typeof position != "number" ||
+      position <= 0 ||
+      position >= this.chain.length
+    ) {
+      this.chain = [];
+      throw new Error("You can't remove incorrect link!");
+    }
+    this.chain.splice(position - 1, 1);
     return this;
   },
   reverseChain() {
-    let arr = this.chain.split("~~");
-    arr.reverse();
-    this.chain = arr.join("~~");
+    this.chain.reverse();
     return this;
   },
 
   finishChain() {
-    return chainMaker.chain;
+    let res = this.chain.join("~~");
+    this.chain = [];
+    return res;
   },
 };
+
 
 // const one = chainMaker
 //   .addLink(function () {})
@@ -42,15 +47,7 @@ const chainMaker = {
 //   .removeLink(2)
 //   .reverseChain()
 //   .finishChain();
-// console.log(
-//   chainMaker
-//     .addLink(function () {})
-//     .addLink("2nd")
-//     .addLink("3rd")
-//     .removeLink(2)
-//     .reverseChain()
-//     .finishChain()
-// );
+// console.log(one);
 
 // const two = "( 3rd )~~( function () { } )";
 // console.log(two);
